@@ -160,3 +160,24 @@ echo "Example run:"
 echo "gmx_mpi mdrun -plumed plumed.dat"
 
 echo "-------------------------------------------"
+
+# Enabled GPU as well: 
+export PATH=$HOME/software/cmake/bin:$PATH
+
+cd ~/software/gromacs-2022.4
+rm -rf build
+mkdir build
+cd build
+
+cmake .. \
+-DCMAKE_INSTALL_PREFIX=$HOME/software/gromacs-2022.4-plumed \
+-DGMX_MPI=ON \
+-DGMX_THREAD_MPI=OFF \
+-DGMX_GPU=CUDA \
+-DGMX_CUDA_TARGET_SM=86 \
+-DGMX_BUILD_OWN_FFTW=ON
+
+make -j$(nproc)
+make install
+
+source ~/software/gromacs-2022.4-plumed/bin/GMXRC
